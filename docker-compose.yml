@@ -1,0 +1,97 @@
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3307:3306"
+    networks:
+      - ms-network
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - ms-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    restart: unless-stopped
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - ms-network
+
+  authservice:
+    build:
+      context: ./AuthService
+      dockerfile: Dockerfile
+    container_name: authservice
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+      - kafka
+    networks:
+      - ms-network
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+
+  userservice:
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    container_name: userservice
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+      - kafka
+    networks:
+      - ms-network
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  ms-network:
+    driver: bridge

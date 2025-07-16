@@ -1,6 +1,5 @@
 package com.example.model;
 
-import com.example.entities.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +13,7 @@ import lombok.NoArgsConstructor;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserEventDto{
 
+    private String userId;
     private String firstName; // first_name
 
     private String lastName; //last_name
@@ -21,4 +21,5 @@ public class UserEventDto{
     private Long phoneNumber;
 
     private String email; // email
+    private String profilePic;
 }

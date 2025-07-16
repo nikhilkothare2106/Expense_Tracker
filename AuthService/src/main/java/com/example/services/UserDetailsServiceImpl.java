@@ -56,17 +56,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .password(encodedPassword)
                 .roles(new HashSet<>())
                 .build();
-//        userRepository.save(build);
+        userRepository.save(build);
 
 
         //push event
 
-
         UserEventDto eventDto = UserEventDto.builder()
+                .userId(userId)
                 .firstName(signupRequest.getFirstName())
                 .lastName(signupRequest.getLastName())
                 .phoneNumber(signupRequest.getPhoneNumber())
                 .email(signupRequest.getEmail())
+                .profilePic(signupRequest.getProfilePic())
                 .build();
         userProducer.sendEventToKafka(eventDto);
 

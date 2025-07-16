@@ -1,22 +1,23 @@
 package com.example.deserializer;
 
-import com.example.entities.User;
+import com.example.model.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import java.io.IOException;
 
-public class UserDeserializer implements Deserializer<User> {
+public class UserDeserializer implements Deserializer<UserDto> {
 
     @Override
-    public User deserialize(String s, byte[] bytes) {
+    public UserDto deserialize(String s, byte[] bytes) {
+
         ObjectMapper mapper = new ObjectMapper();
-        User user = null;
+        UserDto userDto = null;
         try {
-            user = mapper.readValue(bytes,User.class);
+            userDto = mapper.readValue(bytes, UserDto.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return user;
+        return userDto;
     }
 }

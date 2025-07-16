@@ -1,9 +1,7 @@
 package com.example.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -12,15 +10,21 @@ import lombok.*;
 @Builder
 @Data
 @ToString
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Id
+    @NonNull
     private String userId;
+    @NonNull
     private String firstName;
+    @NonNull
     private String lastName;
     private Long phoneNumber;
     private String email;
-//    private String profilePic;
+    private String profilePic;
 }

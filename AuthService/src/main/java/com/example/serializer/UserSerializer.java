@@ -9,8 +9,8 @@ public class UserSerializer implements Serializer<UserEventDto> {
 
     @Override
     public byte[] serialize(String s, UserEventDto userDto) {
-        byte[] bytes = null;
         ObjectMapper mapper = new ObjectMapper();
+        byte[] bytes = null;
         try {
             bytes = mapper.writeValueAsString(userDto).getBytes();
 
