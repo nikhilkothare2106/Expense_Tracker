@@ -1,0 +1,6 @@
+Flask==3.1.1
+kafka_python==2.2.15
+langchain_core==0.3.69
+langchain_mistralai==0.2.11
+pydantic==2.11.7
+python-dotenv==1.1.1

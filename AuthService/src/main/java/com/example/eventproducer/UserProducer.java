@@ -24,6 +24,7 @@ public class UserProducer {
                 .setHeader(KafkaHeaders.TOPIC, TOPIC_NAME)
                 .build();
         kafkaTemplate.send(message);
+        System.out.println("event send to kafka.");
     }
 
 }

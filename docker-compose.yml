@@ -7,7 +7,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: root123
     ports:
-      - "3307:3306"
+      - "3305:3306"
     networks:
       - ms-network
     volumes:
@@ -68,6 +68,7 @@ services:
       - MYSQL_PORT=3306
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+      - SECRET_KEY=
 
   userservice:
     build:
@@ -87,6 +88,40 @@ services:
       - MYSQL_PORT=3306
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+
+  expenseservice:
+    build:
+      context: ./ExpenseService
+      dockerfile: Dockerfile
+    container_name: expenseservice
+    restart: unless-stopped
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mysql
+      - kafka
+    networks:
+      - ms-network
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
+
+  smsanalysisservice:
+    build:
+      context: ./SmsAnalysisService
+      dockerfile: Dockerfile
+    container_name: smsanalysisservice
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    depends_on:
+      - kafka
+    env_file:
+      - ./SmsAnalysisService/.env
+    networks:
+      - ms-network
 
 volumes:
   mysql-data:
