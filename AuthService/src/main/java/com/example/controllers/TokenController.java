@@ -84,8 +84,8 @@ public class TokenController {
 
     }
 
-    @GetMapping("/hi")
-    public ResponseEntity helper(){
+    @GetMapping("/test")
+    public ResponseEntity<?> helper(){
         return ResponseEntity.ok().build();
     }
 

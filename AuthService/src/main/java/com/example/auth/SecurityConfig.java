@@ -33,9 +33,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtAuthFilter) throws Exception {
-
         return http
-                .csrf(AbstractHttpConfigurer::disable).cors(CorsConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/login", "/auth/refreshToken", "/auth/signup").permitAll()
                         .anyRequest().authenticated()
@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider())
                 .build();
     }
+
 
 
     @Bean

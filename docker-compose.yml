@@ -68,7 +68,7 @@ services:
       - MYSQL_PORT=3306
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
-      - SECRET_KEY=
+      - SECRET_KEY=dsofoso4r049sOfsnduIB8IuhE0oFHhadcjskjr4u923fhowi49r204hewoifh8DH94fh
 
   userservice:
     build:
