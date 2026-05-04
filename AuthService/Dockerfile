@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Runtime stage
-FROM openjdk:17
+FROM eclipse-temurin:17
 WORKDIR /usr/src/myapp
 
 COPY --from=builder /usr/src/myapp/target/*.jar authservice.jar
