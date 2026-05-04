@@ -108,20 +108,20 @@ services:
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
       - SPRING_KAFKA_PROPERTIES_SECURITY_PROTOCOL=PLAINTEXT
 
-  smsanalysisservice:
-    build:
-      context: ./SmsAnalysisService
-      dockerfile: Dockerfile
-    container_name: smsanalysisservice
-    restart: unless-stopped
-    ports:
-      - "5000:5000"
-    depends_on:
-      - kafka
-    env_file:
-      - ./SmsAnalysisService/.env
-    networks:
-      - ms-network
+  # smsanalysisservice:
+  #   build:
+  #     context: ./SmsAnalysisService
+  #     dockerfile: Dockerfile
+  #   container_name: smsanalysisservice
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - kafka
+  #   env_file:
+  #     - ./SmsAnalysisService/.env
+  #   networks:
+  #     - ms-network
 
 volumes:
   mysql-data:
